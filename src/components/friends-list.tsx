@@ -7,10 +7,25 @@ import { Input } from "./ui/input";
 import { RootState } from "@/lib/store";
 import FriendCard from "./friend-card";
 import { removeFriend } from "@/lib/features/friends/friendsSlice";
+import { useState } from "react";
+import { itemsPerPage } from "@/lib/features/friends/constants";
+import Pagination from "./pagination";
 
 export default function FriendsList() {
   const dispatch = useDispatch();
   const { friends } = useSelector((state: RootState) => state.friends);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  //paginated friends
+  const totalPages = Math.ceil(friends.length / itemsPerPage);
+  const paginatedFriends = friends.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="space-y-6">
@@ -33,8 +48,8 @@ export default function FriendsList() {
 
       {/* render list here */}
       <div className="flex flex-col gap-4">
-        {friends.length > 0 ? (
-          friends.map((friend) => (
+        {paginatedFriends.length > 0 ? (
+          paginatedFriends.map((friend) => (
             <FriendCard
               key={friend.id}
               friend={friend}
@@ -49,6 +64,13 @@ export default function FriendsList() {
       </div>
 
       {/* pagination */}
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }
