@@ -1,13 +1,13 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-export type Friends = {
+export type Friend = {
   id: string;
   name: string;
   isFavorite: boolean;
 };
 
 type FriendsState = {
-  friends: Friends[];
+  friends: Friend[];
 };
 
 const initialState: FriendsState = {
