@@ -24,6 +24,15 @@ export const friendsSlice = createSlice({
   name: "friends",
   initialState,
   reducers: {
+    //ad friends
+    addFriend: (state, action: PayloadAction<string>) => {
+      const newFriend: Friend = {
+        id: Date.now().toString(),
+        name: action.payload,
+        isFavorite: false,
+      };
+      state.friends.push(newFriend);
+    },
     //remove friend
     removeFriend: (state, action: PayloadAction<string>) => {
       state.friends = state.friends.filter(
@@ -33,5 +42,5 @@ export const friendsSlice = createSlice({
   },
 });
 
-export const { removeFriend } = friendsSlice.actions;
+export const { removeFriend, addFriend } = friendsSlice.actions;
 export default friendsSlice.reducer;
