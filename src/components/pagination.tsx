@@ -26,7 +26,6 @@ export default function Pagination({
         className={cn("", { "cursor-not-allowed": currentPage === 1 })}
       />
       {pages.map((page) => (
-        // <PaginationItem key={page}>
         <PaginationLink
           href="#"
           isActive={currentPage === page}
@@ -35,7 +34,6 @@ export default function Pagination({
         >
           {page}
         </PaginationLink>
-        // </PaginationItem>
       ))}
       <PaginationNext
         href="#"

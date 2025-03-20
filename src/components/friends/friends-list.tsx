@@ -8,7 +8,7 @@ import {
   removeFriend,
   toggleFavorite,
 } from "@/lib/features/friends/friendsSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { itemsPerPage } from "@/lib/features/friends/constants";
 import Pagination from "../pagination";
 import useDebounce from "@/hooks/useDebounce";
@@ -37,27 +37,39 @@ export default function FriendsList() {
   }, [debouncedSearchQuery, searchInputValue]);
 
   //filter friends based on search query
-  const filteredFriends = friends.filter((friend) =>
-    friend.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+  const filteredFriends = useMemo(
+    () =>
+      friends.filter((friend) =>
+        friend.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+      ),
+    [debouncedSearchQuery, friends]
   );
 
   //sort friends based on favorites
-  const sortedFriends = [...filteredFriends].sort((a, b) => {
-    if (showFavoritesFirst) {
-      return b.isFavorite === a.isFavorite
-        ? a.name.localeCompare(b.name)
-        : b.isFavorite
-        ? 1
-        : -1;
-    }
-    return a.name.localeCompare(b.name);
-  });
+  const sortedFriends = useMemo(
+    () =>
+      [...filteredFriends].sort((a, b) => {
+        if (showFavoritesFirst) {
+          return b.isFavorite === a.isFavorite
+            ? a.name.localeCompare(b.name)
+            : b.isFavorite
+            ? 1
+            : -1;
+        }
+        return a.name.localeCompare(b.name);
+      }),
+    [filteredFriends, showFavoritesFirst]
+  );
 
   //paginated friends
   const totalPages = Math.ceil(sortedFriends.length / itemsPerPage);
-  const paginatedFriends = sortedFriends.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  const paginatedFriends = useMemo(
+    () =>
+      sortedFriends.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      ),
+    [currentPage, sortedFriends]
   );
 
   const handlePageChange = (page: number) => {
