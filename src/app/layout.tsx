@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Friends List",
-  description: "A simple friends list app.To manage your friends.",
+  description: "A simple friends list app. To manage your friends.",
 };
 
 export default function RootLayout({
