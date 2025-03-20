@@ -10,21 +10,34 @@ import {
   removeFriend,
   toggleFavorite,
 } from "@/lib/features/friends/friendsSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { itemsPerPage } from "@/lib/features/friends/constants";
 import Pagination from "./pagination";
+import useDebounce from "@/hooks/useDebounce";
 
 export default function FriendsList() {
   const dispatch = useDispatch();
   const { friends } = useSelector((state: RootState) => state.friends);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
   const [showFavoritesFirst, setShowFavoritesFirst] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+
+  const debouncedSearchQuery = useDebounce(searchInputValue, 300);
+
+  useEffect(() => {
+    setCurrentPage(1);
+    if (searchInputValue !== debouncedSearchQuery) {
+      setIsSearching(true);
+    } else {
+      setIsSearching(false);
+    }
+  }, [debouncedSearchQuery, searchInputValue]);
 
   //filter friends based on search query
   const filteredFriends = friends.filter((friend) =>
-    friend.name.toLowerCase().includes(searchQuery.toLowerCase())
+    friend.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
   );
 
   //sort friends based on favorites
@@ -49,14 +62,14 @@ export default function FriendsList() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
+  console.log("isSearching", isSearching);
   return (
     <div className="space-y-6">
       <div className="flex gap-4 flex-col sm:flex-row justify-between items-center">
         <Input
           placeholder="Search friends..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={searchInputValue}
+          onChange={(e) => setSearchInputValue(e.target.value)}
           className="max-w-xs"
         />
         <Button
