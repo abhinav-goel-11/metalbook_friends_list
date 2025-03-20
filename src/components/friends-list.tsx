@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { itemsPerPage } from "@/lib/features/friends/constants";
 import Pagination from "./pagination";
 import useDebounce from "@/hooks/useDebounce";
+import { Loader2, Search } from "lucide-react";
 
 export default function FriendsList() {
   const dispatch = useDispatch();
@@ -62,16 +63,22 @@ export default function FriendsList() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  console.log("isSearching", isSearching);
+
   return (
     <div className="space-y-6">
       <div className="flex gap-4 flex-col sm:flex-row justify-between items-center">
-        <Input
-          placeholder="Search friends..."
-          value={searchInputValue}
-          onChange={(e) => setSearchInputValue(e.target.value)}
-          className="max-w-xs"
-        />
+        <div className="max-w-xs w-full relative">
+          <Search className="absolute h-5 w-5 left-2 top-1/2 -translate-y-1/2" />
+          <Input
+            placeholder="Search friends..."
+            value={searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
+            className="pl-8"
+          />
+          {isSearching && (
+            <Loader2 className="animate-spin absolute right-2.5 top-1/2 -translate-y-1/2" />
+          )}
+        </div>
         <Button
           variant="outline"
           onClick={() => setShowFavoritesFirst((prev) => !prev)}
