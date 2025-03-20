@@ -15,6 +15,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { Button } from "../ui/button";
 import { Loader2, Search } from "lucide-react";
 import { Input } from "../ui/input";
+import DeleteConfirmationDialog from "../delete-confirmation-dialog";
 
 export default function FriendsList() {
   const dispatch = useDispatch();
@@ -24,6 +25,21 @@ export default function FriendsList() {
   const [showFavoritesFirst, setShowFavoritesFirst] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState("");
+
+  const handleDeleteClick = (id: string) => {
+    setIsDeleteDialogOpen(id);
+  };
+
+  const handleConfirmDelete = () => {
+    dispatch(removeFriend(isDeleteDialogOpen));
+    setIsDeleteDialogOpen("");
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteDialogOpen("");
+  };
 
   const debouncedSearchQuery = useDebounce(searchInputValue, 300);
 
@@ -109,7 +125,7 @@ export default function FriendsList() {
             <FriendCard
               key={friend.id}
               friend={friend}
-              onDelete={() => dispatch(removeFriend(friend.id))}
+              onDelete={() => handleDeleteClick(friend.id)}
               onToggleFavorite={() => dispatch(toggleFavorite(friend.id))}
             />
           ))
@@ -128,6 +144,12 @@ export default function FriendsList() {
           onPageChange={handlePageChange}
         />
       )}
+
+      <DeleteConfirmationDialog
+        isOpen={!!isDeleteDialogOpen}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }
