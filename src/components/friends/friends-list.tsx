@@ -2,8 +2,6 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import AddFriendForm from "./add-friend-form";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import { RootState } from "@/lib/store";
 import FriendCard from "./friend-card";
 import {
@@ -12,9 +10,11 @@ import {
 } from "@/lib/features/friends/friendsSlice";
 import { useEffect, useState } from "react";
 import { itemsPerPage } from "@/lib/features/friends/constants";
-import Pagination from "./pagination";
+import Pagination from "../pagination";
 import useDebounce from "@/hooks/useDebounce";
+import { Button } from "../ui/button";
 import { Loader2, Search } from "lucide-react";
+import { Input } from "../ui/input";
 
 export default function FriendsList() {
   const dispatch = useDispatch();
@@ -109,13 +109,12 @@ export default function FriendsList() {
       </div>
 
       {/* pagination */}
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      )}
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

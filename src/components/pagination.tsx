@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
   //   PaginationItem,
   PaginationLink,
@@ -22,6 +23,7 @@ export default function Pagination({
       <PaginationPrevious
         href="#"
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+        className={cn("", { "cursor-not-allowed": currentPage === 1 })}
       />
       {pages.map((page) => (
         // <PaginationItem key={page}>
@@ -38,6 +40,7 @@ export default function Pagination({
       <PaginationNext
         href="#"
         onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+        className={cn("", { "cursor-not-allowed": currentPage === totalPages })}
       />
     </div>
   );

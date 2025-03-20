@@ -1,4 +1,4 @@
-import FriendsList from "@/components/friends-list";
+import FriendsList from "@/components/friends/friends-list";
 
 export default function Home() {
   return (
