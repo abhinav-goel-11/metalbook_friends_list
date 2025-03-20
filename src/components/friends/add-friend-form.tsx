@@ -27,7 +27,7 @@ export default function AddFriendForm() {
   };
   return (
     <div className="border border-solid border-gray-200 p-4 rounded-lg shadow-sm space-y-4">
-      <h2 className="text-xl">Add New Friend</h2>
+      <h2 className="text-xl font-semibold">Add New Friend</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col sm:flex-row gap-2"
