@@ -8,7 +8,8 @@ export const addFriendFormSchema = z.object({
     })
     .max(50, {
       message: "Name must not exceed 50 characters.",
-    }),
+    })
+    .regex(/^[A-Za-z]+$/, { message: "Name must contain only alphabets" }),
 });
 
 export type AddFriendFormT = z.infer<typeof addFriendFormSchema>;
