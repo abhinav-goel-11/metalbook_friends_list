@@ -33,6 +33,15 @@ export const friendsSlice = createSlice({
       };
       state.friends.push(newFriend);
     },
+    //toggle favorite
+    toggleFavorite: (state, action: PayloadAction<string>) => {
+      const friend = state.friends.find(
+        (friend) => friend.id === action.payload
+      );
+      if (friend) {
+        friend.isFavorite = !friend.isFavorite;
+      }
+    },
     //remove friend
     removeFriend: (state, action: PayloadAction<string>) => {
       state.friends = state.friends.filter(
@@ -42,5 +51,5 @@ export const friendsSlice = createSlice({
   },
 });
 
-export const { removeFriend, addFriend } = friendsSlice.actions;
+export const { removeFriend, addFriend, toggleFavorite } = friendsSlice.actions;
 export default friendsSlice.reducer;

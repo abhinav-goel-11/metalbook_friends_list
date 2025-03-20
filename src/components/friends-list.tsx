@@ -6,7 +6,10 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { RootState } from "@/lib/store";
 import FriendCard from "./friend-card";
-import { removeFriend } from "@/lib/features/friends/friendsSlice";
+import {
+  removeFriend,
+  toggleFavorite,
+} from "@/lib/features/friends/friendsSlice";
 import { useState } from "react";
 import { itemsPerPage } from "@/lib/features/friends/constants";
 import Pagination from "./pagination";
@@ -14,11 +17,31 @@ import Pagination from "./pagination";
 export default function FriendsList() {
   const dispatch = useDispatch();
   const { friends } = useSelector((state: RootState) => state.friends);
+
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showFavoritesFirst, setShowFavoritesFirst] = useState(false);
+
+  //filter friends based on search query
+  const filteredFriends = friends.filter((friend) =>
+    friend.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  //sort friends based on favorites
+  const sortedFriends = [...filteredFriends].sort((a, b) => {
+    if (showFavoritesFirst) {
+      return b.isFavorite === a.isFavorite
+        ? a.name.localeCompare(b.name)
+        : b.isFavorite
+        ? 1
+        : -1;
+    }
+    return a.name.localeCompare(b.name);
+  });
 
   //paginated friends
-  const totalPages = Math.ceil(friends.length / itemsPerPage);
-  const paginatedFriends = friends.slice(
+  const totalPages = Math.ceil(sortedFriends.length / itemsPerPage);
+  const paginatedFriends = sortedFriends.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -32,15 +55,16 @@ export default function FriendsList() {
       <div className="flex gap-4 flex-col sm:flex-row justify-between items-center">
         <Input
           placeholder="Search friends..."
-          //   value={searchQuery}
-          //   onChange={(e) => setSearchQuery(e.target.value)}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           className="max-w-xs"
         />
         <Button
-          //   onClick={() => setShowFavoritesFirst(!showFavoritesFirst)}
+          variant="outline"
+          onClick={() => setShowFavoritesFirst((prev) => !prev)}
           className="whitespace-nowrap"
         >
-          {true ? "Sort by name" : "Favorites first"}
+          {showFavoritesFirst ? "Sort by name" : "Favorites first"}
         </Button>
       </div>
 
@@ -54,6 +78,7 @@ export default function FriendsList() {
               key={friend.id}
               friend={friend}
               onDelete={() => dispatch(removeFriend(friend.id))}
+              onToggleFavorite={() => dispatch(toggleFavorite(friend.id))}
             />
           ))
         ) : (
