@@ -12,11 +12,11 @@ type FriendsState = {
 
 const initialState: FriendsState = {
   friends: [
-    { id: "1", name: "Alex", isFavorite: true },
-    { id: "2", name: "Taylor", isFavorite: false },
-    { id: "3", name: "Jordan", isFavorite: true },
-    { id: "4", name: "Casey", isFavorite: false },
-    { id: "5", name: "Riley", isFavorite: false },
+    { id: "1", name: "Abhinav", isFavorite: true },
+    { id: "2", name: "Tarun", isFavorite: false },
+    { id: "3", name: "Jitender", isFavorite: true },
+    { id: "4", name: "Bharat", isFavorite: false },
+    { id: "5", name: "Rajat", isFavorite: false },
   ],
 };
 
