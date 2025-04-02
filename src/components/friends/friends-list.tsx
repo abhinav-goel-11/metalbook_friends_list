@@ -118,7 +118,7 @@ export default function FriendsList() {
 
       <AddFriendForm />
 
-      {/* render list here */}
+      {/* Friends list */}
       <div className="flex flex-col gap-4">
         {paginatedFriends.length > 0 ? (
           paginatedFriends.map((friend) => (
